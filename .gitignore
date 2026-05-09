@@ -1,0 +1,9 @@
+myenv/
+venv/
+__pycache__/
+*.pyc
+mlruns/
+*.pkl
+*.h5
+.env
+.DS_Store

@@ -1,0 +1,15 @@
+fastapi 
+uvicorn[standard] 
+pydantic 
+pydantic-settings 
+numpy 
+scikit-learn
+pandas 
+python-multipart 
+torch
+torchvision
+transformers
+Pillow
+psycopg2-binary
+sqlalchemy
+tensorflow>=2.15.0
