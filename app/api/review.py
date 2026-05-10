@@ -12,7 +12,8 @@ router = APIRouter(prefix="/review", tags=["Review"])
 def get_review_service():
     """Dependency to get review service instance"""
     settings = get_settings()
-    return ReviewService(use_ai=settings.use_ai_models)
+    model_path = os.path.join(settings.model_dir,"review_classification_model.pkl")
+    return ReviewService(use_ai=settings.use_ai_models, model_path=model_path)
 
 
 @router.post("/fake-or-real", response_model=ReviewClassificationResponse)

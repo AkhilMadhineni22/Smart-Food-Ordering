@@ -5,8 +5,8 @@ from app.models.ml_models import DelivaryTimeModel
 from app.models.schemas import DeliveryTimeRequest, DeliveryTimeResponse
 
 class DeliveryService:
-    def __init__(self, use_ai: bool = True):
-        self.model = DelivaryTimeModel()
+    def __init__(self, model_path: str, use_ai: bool = True):
+        self.model = DelivaryTimeModel(model_path=model_path)
 
     def predict_delivery_time(self,request:DeliveryTimeRequest) -> DeliveryTimeResponse:
         "Predict delivery time based on input features"

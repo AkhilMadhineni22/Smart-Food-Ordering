@@ -12,7 +12,8 @@ router = APIRouter(prefix="/restaurant", tags=["cuisine"])
 def get_cuisine_service():
     "Dependancy to get cuisine service instance"
     settings = get_settings()
-    return CuisineService(use_ai=settings.use_ai_models)
+    model_path = os.path.join(settings.model_dir,"cuisine_classifier_model.pkl")
+    return CuisineService( use_ai=settings.use_ai_models, model_path=model_path)
 
 @router.post("/cuisine-classifier", response_model=CuisineClassificationResponse)
 async def classify_cuisine(

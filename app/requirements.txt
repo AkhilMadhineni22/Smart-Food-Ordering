@@ -1,0 +1,21 @@
+fastapi 
+uvicorn[standard] 
+pydantic 
+pydantic-settings 
+numpy 
+scikit-learn==1.6.1
+pandas 
+python-multipart 
+transformers
+Pillow
+psycopg2-binary
+sqlalchemy
+tensorflow>=2.15.0
+mlflow
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.7.0+cpu
+torchvision==0.22.0+cpu
+torchaudio==2.7.0+cpu
+
+sentence-transformers

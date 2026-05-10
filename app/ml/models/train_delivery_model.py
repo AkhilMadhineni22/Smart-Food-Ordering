@@ -8,7 +8,6 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import mean_absolute_error, r2_score
-
 # load dataset
 df = pd.read_csv("C:/Users/Mahesh/Desktop/smart food ordering/app/data/Food_Delivery_Times.csv")
 

@@ -65,10 +65,10 @@ async def root():
     ai_models_loaded = False
     if os.path.exists(model_dir):
         model_files = [
-            "delivery_model.pkl",
-            "recommendation_model.pkl",
-            "review_model.pkl",
-            "cuisine_model.pkl"
+            "delivery_time_model.pkl",
+            "recommendation_model.keras",
+            "review_classification_model.pkl",
+            "cuisine_classifier_model.pkl"
         ]
         ai_models_loaded = any(
             os.path.exists(os.path.join(model_dir, f)) for f in model_files

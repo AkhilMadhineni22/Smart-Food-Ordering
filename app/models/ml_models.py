@@ -12,24 +12,23 @@ import mlflow
 import mlflow.sklearn
 import mlflow.keras
 from transformers import pipeline
+import joblib
 
 class DelivaryTimeModel:
-    def __init__(self):
+    def __init__(self, model_path: Optional[str] = None):
         self.model = None
         self.is_ai = False
-        try:
-            mlflow.set_tracking_uri("file:./mlruns")
+        if model_path:
+            try:
+                model = joblib.load(model_path)
+                self.model = model
+                self.is_ai = True
+                print(" MLflow model loaded successfully")
 
-            self.model = mlflow.sklearn.load_model(
-                "runs:/a910300bf83f4f62acc87b0b4f35cbcd/model"
-            )
-            self.is_ai = True
-            print(" MLflow model loaded successfully")
-
-        except Exception as e:
-            print(" Failed to load MLflow model:", e)
-            self.model = None
-                
+            except Exception as e:
+                print(" Failed to load MLflow model:", e)
+                self.model = None
+                    
 
     def predict(self, Distance_km: float, Weather: str, Traffic_Level: str,
                 Time_of_Day: str, Vehicle_Type: str, Preparation_Time_min: float,
@@ -81,44 +80,54 @@ class DelivaryTimeModel:
          return {"time": round(base_time, 2), "model": "basic"}
 
 class RecommendationModel:
-    def __init__(self):
+    def __init__(self, model_path: str = None):
         self.encoder = None
         self.meta = None
         self.is_ai = False
         self.model = None
+        encoder_path = "app/ml/models/menu_recommendation_encoder.pkl"
+        meta_path = "app/ml/models/meta.pkl"
+        if model_path:
+            try:
+                self.model = tf.keras.models.load_model(model_path)
+                with open(encoder_path, "rb") as f:
+                    self.encoder = pickle.load(f)
 
-        try:
-            mlflow.set_tracking_uri("file:./mlruns")
+                with open(meta_path, "rb") as f:
+                    self.meta = pickle.load(f)
+                    self.is_ai = True
+                
+            # mlflow.set_tracking_uri("file:./mlruns")
 
-            run_id = "a1ba02e067264e8cbe0b8bb9e442c393"
+            # run_id = "a1ba02e067264e8cbe0b8bb9e442c393"
 
 
-            # Load model
-            self.model = mlflow.keras.load_model(f"runs:/{run_id}/model")
-            self.is_ai = True
+            # # Load model
+            # self.model = mlflow.keras.load_model(f"runs:/{run_id}/model")
+            # self.is_ai = True
 
-            # Download artifacts
-            encoder_path = mlflow.artifacts.download_artifacts(
-                run_id=run_id,
-                artifact_path="encoder.pkl"
-            )
-            meta_path = mlflow.artifacts.download_artifacts(
-                run_id=run_id,
-                artifact_path="meta.pkl"
-            )
+            # # Download artifacts
+            # encoder_path = mlflow.artifacts.download_artifacts(
+            #     run_id=run_id,
+            #     artifact_path="encoder.pkl"
+            # )
+            # meta_path = mlflow.artifacts.download_artifacts(
+            #     run_id=run_id,
+            #     artifact_path="meta.pkl"
+            # )
 
-             #  Load them
-            with open(encoder_path, "rb") as f:
-                self.encoder = pickle.load(f)
+            #  #  Load them
+            # with open(encoder_path, "rb") as f:
+            #     self.encoder = pickle.load(f)
 
-            with open(meta_path, "rb") as f:
-                self.meta = pickle.load(f)
+            # with open(meta_path, "rb") as f:
+            #     self.meta = pickle.load(f)
 
-            self.max_len = self.meta["max_len"]
+            # self.max_len = self.meta["max_len"]
 
-            print(" Recommendation model loaded successfully")
+                print(" Recommendation model loaded successfully")
 
-        except Exception as e:
+            except Exception as e:
                 print(" Failed to load model:", e)
 
     def recommend(self,past_orders:List[str]) -> Dict[str,any]:
@@ -171,30 +180,33 @@ class RecommendationModel:
             }
 
 class ReviewClassifierModel:
-    def __init__(self):
+    def __init__(self, model_path: str = None):
         self.model = None
         self.is_ai = False
-        try:
-               mlflow.set_tracking_uri("file:./mlruns")
+        if model_path:
+            try:
+               self.model = joblib.load(model_path)
 
-               from mlflow.tracking import MlflowClient
+            #    mlflow.set_tracking_uri("file:./mlruns")
 
-               client = MlflowClient()
-               exp = client.get_experiment_by_name("Review Classification model")
+            #    from mlflow.tracking import MlflowClient
 
-               runs = client.search_runs(
-               exp.experiment_id,
-               order_by=["start_time DESC"],
-               max_results=1
-                )
+            #    client = MlflowClient()
+            #    exp = client.get_experiment_by_name("Review Classification model")
 
-               run_id = runs[0].info.run_id
+            #    runs = client.search_runs(
+            #    exp.experiment_id,
+            #    order_by=["start_time DESC"],
+            #    max_results=1
+            #     )
 
-               self.model = mlflow.sklearn.load_model(f"runs:/{run_id}/model")
+            #    run_id = runs[0].info.run_id
+
+            #    self.model = mlflow.sklearn.load_model(f"runs:/{run_id}/model")
 
                self.is_ai = True
                print(" Review model loaded")
-        except Exception as e:
+            except Exception as e:
                 print("Error loading review classifier model:", e)
 
     def classify(self, rating:float, review_text:str) -> Dict[str,any]:
@@ -256,21 +268,17 @@ class CuisineClassifierModel:
         "Mediterranean": ["hummus", "falafel", "pita", "tzatziki", "tabbouleh"]
     }
 
-    def __init__(self,):
+    def __init__(self, model_path: str = None):
         self.is_ai = False
         self.vectorizer = None
         self.model = None
-        try:
-                mlflow.set_tracking_uri("file:./mlruns")
-
-                self.model = mlflow.sklearn.load_model(
-                "runs:/321bbef387e442e6bf84ac1fa277c7df/model"
-                )
-
+        if model_path:
+            try:
+                self.model = joblib.load(model_path)
                 self.is_ai = True
                 print(" Cuisine model loaded")
 
-        except Exception as e:
+            except Exception as e:
                 print(f"Warning: Failed to load cuisine model: {e}")
                 self.is_ai = False
 
@@ -335,17 +343,25 @@ class TicketAssignmentModel:
         self.reason_model = None
         self.agents = []
 
-        if self.use_ai:
+        # if self.use_ai:
+        #     try:
+        #         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+        #     except Exception as e:
+        #         print(f"Warning: AI models failed to load: {e}. Using basic mode.")
+        #         self.use_ai = False
+        self.embedding_model = None
+
+    def assign(self, issue_text: str):
+        if self.use_ai and self.embedding_model is None:
             try:
                 self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
             except Exception as e:
-                print(f"Warning: AI models failed to load: {e}. Using basic mode.")
-                self.use_ai = False
+                print(f"Embedding model failed: {e}")
+                return self._basic_assign(issue_text)
 
-    def assign(self, issue_text: str):
-        if not self.use_ai or not self.embedding_model:
+        if not self.use_ai or self.embedding_model is None:
             return self._basic_assign(issue_text)
-
+        
         ticket_embedding = self.embedding_model.encode([issue_text])
 
         best_agent = None

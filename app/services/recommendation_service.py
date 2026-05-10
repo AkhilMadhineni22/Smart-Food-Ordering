@@ -6,8 +6,8 @@ from app.models.ml_models import RecommendationModel
 from app.models.schemas import MenuRecommendationRequest , MenuRecommendationResponse
 
 class RecommendationService:
-    def __init__(self, use_ai: bool = True):
-        self.model = RecommendationModel()
+    def __init__(self, use_ai: bool = True, model_path: str = None):
+        self.model = RecommendationModel(model_path=model_path)
 
     def recommend_item(self, request:MenuRecommendationRequest) -> MenuRecommendationResponse:
         """Recommend next menu item based on past orders"""

@@ -6,8 +6,9 @@ from app.models.ml_models import ReviewClassifierModel
 from app.models.schemas import ReviewClassificationRequest, ReviewClassificationResponse
 
 class ReviewService:
-    def __init__(self, use_ai: bool = True):
-        self.model = ReviewClassifierModel()
+    def __init__(self, use_ai: bool = True, model_path: str = None):
+        self.model = ReviewClassifierModel(model_path=model_path)
+
     def classify_review(self, request:ReviewClassificationRequest) -> ReviewClassificationResponse:
         """Classify if review is genuine or fake"""
         result = self.model.classify(

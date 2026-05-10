@@ -6,8 +6,8 @@ from app.models.ml_models import CuisineClassifierModel
 from app.models.schemas import CuisineClassificationRequest,CuisineClassificationResponse,CuisineType
 
 class CuisineService:
-    def __init__(self, use_ai: bool = False):
-        self.model = CuisineClassifierModel()
+    def __init__(self, use_ai: bool = False, model_path: str = None):
+        self.model = CuisineClassifierModel(model_path=model_path)
 
     def classify_cuisine(self, request:CuisineClassificationRequest) -> CuisineClassificationResponse:
         """classify cuisine type based on menu items"""
