@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  backend build:
+  backend-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,7 @@ jobs:
         run: |
           docker build -t backend-image -f Dockerfile.backend .
 
-  frontend build:
+  frontend-build:
     runs-on: ubuntu-latest
 
     steps:
