@@ -52,6 +52,11 @@ with mlflow.start_run():
 
     mlflow.log_metric("mae",mae)
     mlflow.log_metric("r2",r2)
+    mlflow.log_param("model_type", "LogisticRegression")
+    mlflow.log_param("n_estimators", 100)
+    mlflow.log_param("test_size", 0.2)
+    mlflow.log_param("categorical_columns", categorical_cols)
+    mlflow.log_param("numerical_columns", numerical_cols)
 
     mlflow.sklearn.log_model(pipeline, "model")
 

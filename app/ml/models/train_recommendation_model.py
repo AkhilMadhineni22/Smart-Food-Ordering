@@ -69,14 +69,29 @@ model.compile(
     metrics = ["accuracy"]
 )
 
-model.fit(X, y, epochs=10)
 
 #mlflow
 mlflow.set_tracking_uri("file:./mlruns")
 mlflow.set_experiment("Menu Recommendation model")
 
 with mlflow.start_run() as run:
+    history = model.fit(X, y, epochs=10)
 
+    mlflow.log_metric(
+    "final_accuracy",
+    history.history["accuracy"][-1]
+)
+
+    mlflow.log_metric(
+        "final_loss",
+        history.history["loss"][-1]
+    )
+
+    mlflow.log_param("embedding_dim", 32)
+    mlflow.log_param("lstm_units", 32)
+    mlflow.log_param("epochs", 10)
+    mlflow.log_param("max_sequence_length", 5)
+    mlflow.log_param("vocab_size", vocab_size)
     # Log Keras model properly
     mlflow.keras.log_model(
         model,

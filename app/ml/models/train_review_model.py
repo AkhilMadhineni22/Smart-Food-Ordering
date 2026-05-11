@@ -53,6 +53,11 @@ mlflow.set_experiment("Review Classification model")
 with mlflow.start_run():
     mlflow.log_metric("accuracy", accuracy)
     mlflow.log_param("model", "RandomForest"+"TFIDF")
+    mlflow.log_param("n_estimators", 200)
+    mlflow.log_param("max_depth", 20)
+    mlflow.log_param("min_samples_split", 10)
+    mlflow.log_param("min_samples_leaf", 2)
+    mlflow.log_param("max_features", "sqrt")
     
     for label in ["Positive", "Negative"]:
         mlflow.log_metric(f"{label}_precision", report[label]["precision"])

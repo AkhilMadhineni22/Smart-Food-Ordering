@@ -57,6 +57,13 @@ with mlflow.start_run() as run:
     print("Classification Report:", report)
 
     mlflow.log_metric("accuracy", acc)
+    mlflow.log_param("model_type", "MLPClassifier")
+    mlflow.log_param("max_features", 5000)
+    mlflow.log_param("ngram_range", "(1,2)")
+    mlflow.log_param("hidden_layers", "(128,64)")
+    mlflow.log_param("activation", "relu")
+    mlflow.log_param("solver", "adam")
+    mlflow.log_param("test_size", 0.2)
 
     for label, metrics in report.items():
         if isinstance(metrics, dict):

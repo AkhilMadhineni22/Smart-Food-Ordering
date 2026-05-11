@@ -1,17 +1,12 @@
 import pickle
-import os
 import numpy as np
 import pandas as pd
 from collections import Counter
 from typing import Optional, List, Dict, Any
-from sentence_transformers import SentenceTransformer
+#from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import tensorflow as tf
 import joblib
-import mlflow
-import mlflow.sklearn
-import mlflow.keras
-from transformers import pipeline
 import joblib
 
 class DelivaryTimeModel:
@@ -338,7 +333,7 @@ class TicketAssignmentModel:
         from app.config import get_settings
         settings = get_settings()
 
-        self.use_ai = settings.use_ai_models
+        self.use_ai = False
         self.embedding_model = None
         self.reason_model = None
         self.agents = []
@@ -349,11 +344,11 @@ class TicketAssignmentModel:
         #     except Exception as e:
         #         print(f"Warning: AI models failed to load: {e}. Using basic mode.")
         #         self.use_ai = False
-        self.embedding_model = None
 
     def assign(self, issue_text: str):
         if self.use_ai and self.embedding_model is None:
             try:
+                from sentence_transformers import SentenceTransformer
                 self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
             except Exception as e:
                 print(f"Embedding model failed: {e}")
