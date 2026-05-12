@@ -4,6 +4,7 @@ import pandas as pd
 from collections import Counter
 from typing import Optional, List, Dict, Any
 #from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import tensorflow as tf
 import joblib
@@ -91,34 +92,6 @@ class RecommendationModel:
                 with open(meta_path, "rb") as f:
                     self.meta = pickle.load(f)
                     self.is_ai = True
-                
-            # mlflow.set_tracking_uri("file:./mlruns")
-
-            # run_id = "a1ba02e067264e8cbe0b8bb9e442c393"
-
-
-            # # Load model
-            # self.model = mlflow.keras.load_model(f"runs:/{run_id}/model")
-            # self.is_ai = True
-
-            # # Download artifacts
-            # encoder_path = mlflow.artifacts.download_artifacts(
-            #     run_id=run_id,
-            #     artifact_path="encoder.pkl"
-            # )
-            # meta_path = mlflow.artifacts.download_artifacts(
-            #     run_id=run_id,
-            #     artifact_path="meta.pkl"
-            # )
-
-            #  #  Load them
-            # with open(encoder_path, "rb") as f:
-            #     self.encoder = pickle.load(f)
-
-            # with open(meta_path, "rb") as f:
-            #     self.meta = pickle.load(f)
-
-            # self.max_len = self.meta["max_len"]
 
                 print(" Recommendation model loaded successfully")
 
@@ -181,24 +154,6 @@ class ReviewClassifierModel:
         if model_path:
             try:
                self.model = joblib.load(model_path)
-
-            #    mlflow.set_tracking_uri("file:./mlruns")
-
-            #    from mlflow.tracking import MlflowClient
-
-            #    client = MlflowClient()
-            #    exp = client.get_experiment_by_name("Review Classification model")
-
-            #    runs = client.search_runs(
-            #    exp.experiment_id,
-            #    order_by=["start_time DESC"],
-            #    max_results=1
-            #     )
-
-            #    run_id = runs[0].info.run_id
-
-            #    self.model = mlflow.sklearn.load_model(f"runs:/{run_id}/model")
-
                self.is_ai = True
                print(" Review model loaded")
             except Exception as e:
@@ -333,23 +288,16 @@ class TicketAssignmentModel:
         from app.config import get_settings
         settings = get_settings()
 
-        self.use_ai = False
+        self.use_ai = settings.use_ai_models
         self.embedding_model = None
         self.reason_model = None
         self.agents = []
 
-        # if self.use_ai:
-        #     try:
-        #         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-        #     except Exception as e:
-        #         print(f"Warning: AI models failed to load: {e}. Using basic mode.")
-        #         self.use_ai = False
-
     def assign(self, issue_text: str):
         if self.use_ai and self.embedding_model is None:
             try:
-                from sentence_transformers import SentenceTransformer
-                self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+                self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+                print("Embedding model loaded successfully")
             except Exception as e:
                 print(f"Embedding model failed: {e}")
                 return self._basic_assign(issue_text)
