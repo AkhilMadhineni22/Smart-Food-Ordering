@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.models.schemas import HealthResponse
-from app.api import delivery, recommendation, review, cuisine,smart_ticketing
+from app.api import delivery, recommendation, review, cuisine, smart_ticketing
 import os
 
 settings = get_settings()

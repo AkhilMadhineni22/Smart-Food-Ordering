@@ -288,7 +288,7 @@ class TicketAssignmentModel:
         from app.config import get_settings
         settings = get_settings()
 
-        self.use_ai = settings.use_ai_models
+        self.use_ai = False
         self.embedding_model = None
         self.reason_model = None
         self.agents = []
