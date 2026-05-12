@@ -111,3 +111,6 @@ This project demonstrates a complete AI application lifecycle including:
 - MLOps practices
 
 It is designed to be modular, extensible, and production-ready with further enhancements.
+
+Note: The semantic ticket assignment model using SentenceTransformers was disabled in the deployed cloud version due to memory limitations of the Render free-tier infrastructure.
+Note: The deployed backend may take a few seconds to respond initially due to Render free-tier cold starts.
